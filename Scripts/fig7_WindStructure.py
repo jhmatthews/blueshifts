@@ -40,10 +40,10 @@ ia2 = 9
 for f in fnames:
 		full_fname = "{}/{}".format(data_dir, f[:-5])
 		#print (full_fname)
-		#os.system("windsave2table {}".format(full_fname))
+		os.system("windsave2table86g {}".format(full_fname))
 		d = io.read(full_fname + ".master.txt")
 
-		#util.run_py_wind(full_fname, cmds=["1", "L", "0", "3", "s", "q"])
+		util.run_py_wind(full_fname, cmds=["1", "L", "0", "3", "s", "q"], vers="86g")
 		_,_,lc4 = rd.read_pywind("{}.lineC4.dat".format(full_fname))
 		_,_,vol = rd.read_pywind("{}.vol.dat".format(full_fname))
 
