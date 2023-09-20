@@ -1,0 +1,9 @@
+run174_thmin20_rv1e18_vinf1p0_mdotw10p0.spec   
+run182_thmin20_rv1e19_vinf1p0_mdotw5p0.spec   
+run183_thmin20_rv1e19_vinf1p0_mdotw10p0.spec  
+run200_thmin45_rv1e18_vinf1p0_mdotw5p0.spec  
+run209_thmin45_rv1e19_vinf1p0_mdotw5p0.spec 
+run212_thmin45_rv1e19_vinf2p0_mdotw5p0.spec    
+run219_thmin70_rv1e17_vinf1p0_mdotw10p0.spec  
+run228_thmin70_rv1e18_vinf1p0_mdotw10p0.spec   		
+run242_thmin70_rv1e19_vinf3p0_mdotw5p0.spec  
