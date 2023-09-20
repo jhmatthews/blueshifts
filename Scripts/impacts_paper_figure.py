@@ -9,14 +9,13 @@ import jm_util
 from astropy import constants as const
 import os
 import py_read_output as rd
-sys.path.append("/Users/matthewsj/winds/c4_blue/Scripts")
 import blueshift_util
 import matplotlib.patheffects as pe
 jm_util.set_mod_defaults()
 jm_util.set_times()
 W0 = 1450
 
-data_dir  = "/Users/matthewsj/winds/c4_blue/_Data/restart_without/"
+data_dir  = "{}/impacts/".format(blueshift_util.g_DataDir)
 
 
 runs = ["run47","run128"]

@@ -49,10 +49,6 @@ def plot_continuum_normalised(ax, s, colname="A05P0.50", vel_max=10, color="C0",
     x = np.linspace(-1.09*vel_max,1.09*vel_max,1000)
     y = interp_func(x)
 
-    #jm_util.plot_variable_line(ax,velocity/1e3, flux,velocity/1e3,"RdBu_r", lw=2)
-    #(ax,x,y,var,cmap, lw=2)
-    #ax.plot(x, y, c=color, **plot_kwargs)
-    #plt.fill_between(velocity.cgs.value/1e8, y1=np.ones_like(flux), y2=flux, color=color, alpha=0.2)
     blueshift_util.gradient_fill(x, y, ax=ax, mappable = mappable, alpha=1.0, fill_color=color, **plot_kwargs)
     ax.set_xlim(-vel_max,vel_max)
     ax.set_ylim(1,3.5)

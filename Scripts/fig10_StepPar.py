@@ -17,7 +17,7 @@ def make_figure(alpha = "1"):
     jm_util.set_mod_defaults()
     jm_util.set_times()
 
-    data_dir  = "/Users/matthewsj/winds/c4_blue/_Data/steppar_specs_alpha{}/".format(alpha)
+    data_dir  = "{}/steppar_specs_alpha{}/".format(blueshift_util.g_DataDir, alpha)
 
     cmap_names = blueshift_util.cmap_dict
 
