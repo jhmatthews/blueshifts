@@ -1,5 +1,5 @@
-# c4_blue
----------
+# blueshifts
+[![DOI](https://zenodo.org/badge/694044692.svg)](https://zenodo.org/badge/latestdoi/694044692)
 
 Scripts and supplementary data for the paper "A disc wind model for blueshifts in quasar broad emission lines", MNRAS. If you use any of this data please cite the paper accordingly. 
 
