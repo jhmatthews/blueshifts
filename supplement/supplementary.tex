@@ -1,0 +1,145 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Basic setup. Most papers should leave these options alone.
+\documentclass[fleqn,usenatbib,onecolumn]{mnras}
+
+% MNRAS is set in Times font. If you don't have this installed (most LaTeX
+% installations will be fine) or prefer the old Computer Modern fonts, comment
+% out the following line
+\usepackage{newtxtext,newtxmath}
+% Depending on your LaTeX fonts installation, you might get better results with one of these:
+% \usepackage{mathptmx}
+% \usepackage{txfonts}
+
+% Use vector fonts, so it zooms properly in on-screen viewing software
+% Don't change these lines unless you know what you are doing
+\usepackage[T1]{fontenc}
+\usepackage{ae,aecompl}
+
+%Fix hyperref when it runs over pages
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\@combinedblfloats{\box\@outputbox}{\unvbox\@outputbox}{}{%
+  % \errmessage{\noexpand\@combinedblfloats could not be patched}%
+}%
+\makeatother
+
+%%%%% AUTHORS - PLACE YOUR OWN PACKAGES HERE %%%%%
+
+% Only include extra packages if you really need them. Common packages are:
+\usepackage{graphicx}	% Including figure files
+\usepackage{amsmath}	% Advanced maths commands
+\usepackage{amssymb}	% Extra maths symbols
+\usepackage[usenames, dvipsnames]{color} 
+\usepackage{float}
+\usepackage{verbatim}
+\usepackage{orcidlink}
+\usepackage{xcolor}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%% AUTHORS - PLACE YOUR OWN COMMANDS HERE %%%%%
+
+% Please keep new commands to a minimum, and use \newcommand not \def to avoid
+% overwriting existing commands. Example:
+\newcommand{\civ}{\ion{C}{iv}}
+\newcommand{\civline}{\ion{C}{iv}~$\lambda$1550}
+\newcommand{\sivline}{\ion{S}{iv}~$\lambda$1400}
+\newcommand{\mgii}{\ion{Mg}{ii}}
+\newcommand{\siv}{\ion{Si}{iv}}
+\newcommand{\mgiiline}{\ion{Mg}{ii}~$\lambda$2800}
+\newcommand{\heiiuv}{\ion{He}{ii}~$\lambda$1640}
+\newcommand{\ciiiline}{\ion{C}{iii}]~$\lambda$1909}
+\newcommand{\heii}{\ion{He}{ii}}
+\newcommand{\nv}{\ion{N}{V}}
+\newcommand{\nvline}{\ion{N}{V}~$\lambda$1240}
+\newcommand{\oiline}{\ion{O}{i}~$\lambda$6300}
+\newcommand{\oiiiline}{\ion{O}{iii}~$\lambda\lambda$4960,5008}
+\newcommand{\view}{15} % fiducial viewing angle
+\newcommand{\Jamesred}[1]{\textcolor{red}{JM: #1}}
+\newcommand{\James}[1]{\textcolor{cyan}{JM: #1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%% TITLE PAGE %%%%%%%%%%%%%%%%%%%
+% \begin{document}
+% Title of the paper, and the short title which is used in the headers.
+% Keep the title short and informative.
+\title
+[Supplementary material]
+{
+Supplementary material
+}
+
+% The list of authors, and the short list which is used in the headers.
+% If you need two or more lines of authors, add an extra line using \newauthor
+
+\author[J. H. Matthews et al.]
+{James~H.~Matthews$^{\orcidlink{0000-0002-3493-7737}}$,$^{1}$\thanks{james.matthews@physics.ox.ac.uk}
+Jago Strong-Wright$^{\orcidlink{0000-0002-7174-5283}}$,$^{2,3}$
+Christian Knigge$^{\orcidlink{0000-0002-1116-2553}}$,$^{4}$
+Paul Hewett$^{\orcidlink{0000-0002-6528-1937}}$,$^{3}$
+\newauthor
+Matthew J. Temple$^{\orcidlink{0000-0001-8433-550X}}$,$^{5}$ 
+Knox S. Long$^{\orcidlink{0000-0002-4134-864X}}$,$^{6,7}$ 
+Amy L. Rankine$^{\orcidlink{0000-0002-2091-1966}}$,$^{8}$
+Matthew Stepney$^{\orcidlink{0000-0002-7711-0537}}$,$^{4}$
+Manda Banerji$^{\orcidlink{0000-0002-0639-5141}}$$^{4}$ \newauthor
+and
+Gordon T. Richards$^{\orcidlink{0000-0002-1061-1804}}$$^{9}$
+\\$^1$Department of Physics, Astrophysics, University of Oxford, Denys Wilkinson Building, Keble Road, Oxford, OX1 3RH, UK
+\\$^2$DAMTP, Centre for Mathematical Sciences, University of Cambridge, Wilberforce Road, Cambridge CB3 OWA, UK
+\\$^3$Institute of Astronomy, University of Cambridge, Madingley Road, Cambridge, CB3 0HA, UK
+\\$^{4}$School of Physics \& Astronomy, University of Southampton, Southampton SO17 1BJ, UK
+\\$^{5}$Instituto de Estudios Astrof\'{\i}sicos, Universidad Diego Portales, Av. Ej\'ercito Libertador 441, Santiago 8370191, Chile\\
+$^{6}$Space Telescope Science Institute, 3700 San Martin Drive, Baltimore, MD, 21218, USA\\
+$^{7}$Eureka Scientific Inc., 2542 Delmar Avenue, Suite 100, Oakland, CA, 94602-3017, USA\\
+$^{8}$Institute for Astronomy, University of Edinburgh, Royal Observatory, Blackford Hill, Edinburgh EH9 3HJ, UK\\
+$^{9}$Department of Physics, Drexel University, 32 S. 32nd Street, Philadelphia, PA 19104, USA\\
+}
+
+% These dates will be filled out by the publisher
+\date{\today}
+
+% Enter the current year, for the copyright statements etc.
+\pubyear{2023}
+
+% Don't change these lines
+\begin{document}
+\label{firstpage}
+\pagerange{\pageref{firstpage}--\pageref{lastpage}}
+\maketitle
+
+% Abstract of the paper
+\begin{abstract}
+Supplementary material for the paper {\sl ``A disc wind model for C\textsc{iv} emission line blueshifts in quasars"} by J. H. Matthews et al., submitted to MNRAS. 
+\end{abstract}
+
+
+\renewcommand{\thefigure}{S\arabic{figure}}
+\section{\civ\ Line profiles for all models}
+
+In Figs.~\ref{fig:all_line_profiles1}, \ref{fig:all_line_profiles2} and \ref{fig:all_line_profiles3} we show \civline\ line profiles for the entire simulation grid, with 81 models shown for each value of $\alpha$, the acceleration exponent. As in Fig.~3 in the main text, the line profiles are colour coded by inclination and each run is labelled with a unique numeric identifier. 
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\linewidth]{supplement/allprofiles_alpha0.5.png}
+    \caption{All continuum-normalised \civ\ line profiles as a function of velocity and at a range of inclinations for $\alpha=0.5$. The colour scheme is different for each wind inner opening angle $\theta_{\rm min}$, with the polar, intermediate and equatorial winds shown using different colour schemes. The colour-map intensity denotes inclination, $\theta_i$.}
+    \label{fig:all_line_profiles1}
+\end{figure*}
+\begin{figure*}
+    \centering
+    \includegraphics[width=\linewidth]{supplement/allprofiles_alpha1.png}
+    \caption{All \civ\ line profiles as a function of inclination for $\alpha=1$.}
+    \label{fig:all_line_profiles2}
+\end{figure*}
+\begin{figure*}
+    \centering
+    \includegraphics[width=\linewidth]{supplement/allprofiles_alpha1.5.png}
+    \caption{All \civ\ line profiles as a function of inclination for $\alpha=1.5$.}
+    \label{fig:all_line_profiles3}
+\end{figure*}
+
+% Don't change these lines
+\bsp	% typesetting comment
+\label{lastpage}
+\end{document}
