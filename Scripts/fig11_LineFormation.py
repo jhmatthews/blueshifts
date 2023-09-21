@@ -6,8 +6,6 @@ from astropy import constants as const
 from astropy import units as u
 import py_plot_util as util
 import py_read_output as rd 
-from line_util import *
-import jm_util
 import blueshift_util
 import matplotlib.patheffects as pe
 from constants import *
@@ -31,13 +29,11 @@ def vel_law(l, R_v = 1e19, r0=3e16, v0=1e6, fesc = 1.0, alpha=1.0, theta=45.0):
     return (v, vinf, vrot)
 
 def make_figure():
-    jm_util.set_mod_defaults()
-    jm_util.set_times()
+    print ("Making figure 11...", end="")
 
-    alphabase = "0.5"
-    data_dir  = "/Users/matthewsj/winds/c4_blue/_Data/steppar_specs_alpha{}/".format(alphabase)
+    blueshift_util.set_plot_defaults()
 
-    cmap_names = blueshift_util.cmap_dict
+    data_dir  = "{}/steppar_specs_alpha1/".format(blueshift_util.g_DataDir)
 
     plt.figure()
     angles_all = np.arange(5,90,5)
@@ -45,16 +41,11 @@ def make_figure():
 
     rho2nh, _ = blueshift_util.rho2nh()
 
-    par_strings = ["diskmax", "omega", "alpha", "rv", "mdotw", "vinf"]
-
-    if alphabase == "0.5":
-        root = "run47"
-    else:
-        root = "run128"
+    root = "run47"
 
     fnames = ["_alpha0.5.spec","_alpha0.75.spec","_alpha1.spec","_alpha1.25.spec","_alpha1.5.spec"]
 
-    jm_util.set_cmap_cycler("viridis_r", 5)
+    blueshift_util.set_cmap_cycler("viridis_r", 5)
 
     plt.figure(figsize=(13,6))
     alphas = [0.5,0.75,1,1.25,1.5]
@@ -105,8 +96,6 @@ def make_figure():
         x, z, vy, _ = util.wind_to_masked(d, "v_y", return_inwind=True, ignore_partial=True)
         vz = np.sqrt(vz * vz + vx * vx)
 
-        mu = 1.41
-        #print (rho2nh)
         ne = rho * rho2nh
         mappable = plt.scatter(np.log10(vy/1e5), np.log10(vz/1e5), 
                                 c=np.log10(lc4), s=10, vmin=37.5, 
@@ -143,9 +132,9 @@ def make_figure():
     ax2.set_xlabel("$l/R_v$", fontsize=16)
     ax2.legend(frameon=False, loc="upper left", labelspacing=0.1, borderaxespad=0.4, handletextpad=0.4)
     plt.title("Velocity along streamlines")
-    plt.tight_layout(pad=0.06)
     plt.subplots_adjust(wspace=0.05, bottom = 0.1, hspace=0.25, left=0.06, right=0.985, top=0.98)
     blueshift_util.save_paper_figure("fig11.pdf")
+    print ("Done.")
 
 if __name__ == "__main__":
     make_figure()

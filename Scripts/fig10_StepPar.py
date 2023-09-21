@@ -7,15 +7,13 @@ from astropy import constants as const
 from astropy import units as u
 import os
 import py_read_output as rd 
-from line_util import *
-import jm_util
 import blueshift_util
 import matplotlib.patheffects as pe
 
 
 def make_figure(alpha = "1"):
-    jm_util.set_mod_defaults()
-    jm_util.set_times()
+    print ("Making figure 10...", end="")
+    blueshift_util.set_plot_defaults()
 
     data_dir  = "{}/steppar_specs_alpha{}/".format(blueshift_util.g_DataDir, alpha)
 
@@ -68,12 +66,11 @@ def make_figure(alpha = "1"):
         "vinf": [1,1.5,2,2.5,3]
     }
 
-    jm_util.set_cmap_cycler("viridis_r", 5)
-    #jm_util.se
+    blueshift_util.set_cmap_cycler("viridis_r", 5)
 
     plt.figure(figsize=(10,7))
     for itb, tb in enumerate(par_strings):
-        print (itb)
+
 
         # norm, mappable = blueshift_util.get_norm_mappable(cmap=cmap_names[tb])
 
@@ -148,6 +145,7 @@ def make_figure(alpha = "1"):
     plt.tight_layout(pad=0.05, w_pad=0.1)
     plt.subplots_adjust(wspace=0.05)
     blueshift_util.save_paper_figure("fig10.pdf")
+    print ("Done.")
 
 if __name__ == "__main__":
     make_figure()

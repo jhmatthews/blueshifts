@@ -10,7 +10,6 @@ import blueshift_util
 import os
 import py_read_output as rd
 import astropy.io.ascii as io 
-import cmastro
 
 jm_util.set_mod_defaults()
 jm_util.set_times()

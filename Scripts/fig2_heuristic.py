@@ -2,10 +2,8 @@ import os, sys
 import numpy as np 
 import astropy.io.ascii as asc
 import matplotlib.pyplot as plt
-import jm_util
 from astropy import constants as const
 from astropy import units as u
-from line_util import *
 import matplotlib.colors as mcolors
 from matplotlib.patches import Polygon
 from scipy.interpolate import interp1d
@@ -88,9 +86,7 @@ def make_plot_observer(var, data, title, cmap="viridis", log=True, four=True, si
     project2 = np.cos(np.arctan2(z,-x) - angle)
     project3 = np.cos(np.arctan2(-z,-x) - angle)
     project4 = np.cos(np.arctan2(-z,x) - angle)
-    #q = 1.0
-    print (q.shape, x.shape, z.shape)
-    #plt.pcolormesh(x,z,q*project1)
+
     shading = "flat"
     kwargs = {"cmap": cmap, "vmin": vmin, "vmax": vmax, "antialiased": False, "linewidth": 0.0}
     mappable = plt.pcolormesh(x,z,project1 * q, **kwargs)
@@ -111,9 +107,9 @@ def make_plot_observer(var, data, title, cmap="viridis", log=True, four=True, si
     #plt.loglog()
     return mappable
 
-def plot(alpha = 0.5):
-    jm_util.set_mod_defaults()
-    jm_util.set_times()
+def make_figure(alpha = 1):
+    print ("Making figure 2...", end="")
+    blueshift_util.set_plot_defaults()
 
     #alpha = 0.5
     data_dir = blueshift_util.get_data_dir_for_alpha(alpha=alpha)
@@ -186,13 +182,13 @@ def plot(alpha = 0.5):
     plt.subplots_adjust(left=0.0, right=0.99, top=1, bottom=0.0, hspace=0.2, wspace=0.27)
     figure_dir = os.path.abspath(os.path.join(os.path.dirname(__file__ ), '..', 'Figures'))
     plt.savefig("{}/fig2.pdf".format(figure_dir), dpi=200)
-
+    print ("Done.")
 
 if __name__ == "__main__":
     alpha = 1
     if len(sys.argv) > 1:
         alpha = float(sys.argv[1])
-    plot(alpha=alpha)
+    make_figure(alpha=alpha)
 
 
 
