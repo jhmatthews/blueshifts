@@ -8,12 +8,12 @@ import fig12_SedPlot
 
 fig2_heuristic.make_figure()
 fig5_Impacts.make_figure()
-#fig6_BlueshiftSkew.make_figure()
+fig6_BlueshiftSkew.make_figure()
 fig7_WindStructure.make_figure()
 fig10_StepPar.make_figure()
 fig11_LineFormation.make_figure()
 fig12_SedPlot.make_figure()
-print ("All Done.")
+print("All Done.")
 
 # TO DO
 # Get all figure plots working
