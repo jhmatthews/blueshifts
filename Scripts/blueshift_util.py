@@ -437,7 +437,7 @@ def set_plot_defaults():
     """set some nice plot defaults and use times font
     """
     # FIGURE
-    plt.rcParams["text.usetex"] = "True"
+    plt.rcParams["text.usetex"] = "False"
 
     # FONT
     plt.rcParams['font.serif'] = ['Times']

@@ -33,7 +33,7 @@ def make_figure():
         fnames = [f for f in all_files if tb in f]
         roots = [f for f in all_roots if tb in f]
 
-        norm, mappable = blueshift_util.get_norm_mappable(cmap=cmap_names[tb])
+        _, mappable = blueshift_util.get_norm_mappable(cmap=cmap_names[tb])
         ilabel = 0
 
         print("Computing blueshifts and skews for all models with {}".format(tb))
@@ -52,10 +52,8 @@ def make_figure():
             nn = int(roots[j][3:6].strip("_"))
 
             pf_root = f[:-5]
-            pf = rd.read_pf(pf_root)
+            pf = blueshift_util.read_pf(pf_root)
             theta1 = float(pf["SV.thetamin(deg)"])
-            theta2 = float(pf["SV.thetamax(deg)"])
-            launch = float(pf["SV.diskmin(units_of_rstar)"])
 
             angles = np.arange(5, int(theta1)+5, 5)
 
