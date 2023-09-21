@@ -13,7 +13,10 @@ if len(sys.argv) > 1:
     if sys.argv[1] == "--notex":
         tex = "False"
 
+# set defaults
 blueshift_util.set_plot_defaults(tex=tex)
+
+# make plots 
 fig2_heuristic.make_figure()
 fig5_Impacts.make_figure()
 fig6_BlueshiftSkew.make_figure()

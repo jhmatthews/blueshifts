@@ -13,7 +13,6 @@ def make_figure():
     """Make figure 5 from the blueshifts paper
     """
     print("Making figure 5...", end="")
-    blueshift_util.set_plot_defaults()
     W0 = 1450
 
     data_dir = "{}/impacts/".format(blueshift_util.g_DataDir)
