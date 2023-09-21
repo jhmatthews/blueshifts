@@ -1,5 +1,6 @@
 # blueshifts
 [![DOI](https://zenodo.org/badge/694044692.svg)](https://zenodo.org/badge/latestdoi/694044692)
+[![Tests](https://github.com/jhmatthews/blueshifts/actions/workflows/test_figures.yml/badge.svg)](https://github.com/jhmatthews/blueshifts/actions/workflows/test_figures.yml)
 
 Scripts and supplementary data for the paper "A disc wind model for blueshifts in quasar broad emission lines", MNRAS. If you use any of this data please cite the paper accordingly. 
 
