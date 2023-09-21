@@ -464,3 +464,195 @@ def get_mappable(N, vmin=0, vmax=1, cmap_name = "Spectral", return_func = False)
 		return (mappable, colors, mappable.to_rgba)
 	else:
 		return (mappable, colors)
+     
+
+def read_pywind(filename, return_inwind=False, mode="2d", complete=True):
+    """
+    read a py_wind output file using np array reshaping and manipulation
+
+    Parameters            
+        filename : file or str
+            File, filename to read, e.g. root.ne.dat  
+
+        return_inwind: Bool
+            return the array which tells you whether you
+            are partly, fully or not inwind.
+
+        mode: string 
+            can be used to control different coord systems 
+    
+    Returns          
+        x, z, value: masked arrays
+            value is the quantity you are concerned with, e.g. ne
+    """
+    # first, simply load the filename 
+    #d = np.loadtxt(filename, comments="#", dtype = "float", unpack = True)
+    d = io.read(filename)
+
+
+    return wind_to_masked(d, "var", return_inwind=return_inwind, mode=mode)
+
+def read_pf(root):
+
+    '''
+    reads a Python .pf file and returns a dictionary
+
+    Parameters
+        root : file or str
+            File, filename to read.  
+
+        new:
+            True means the Created column exists in the file 
+        
+    Returns
+        pf_dict
+            Dictionary object containing parameters in pf file
+    '''
+    OrderedDict_present=True
+    try:
+        from collections import OrderedDict
+    except ImportError:
+        OrderedDict_present=False
+
+    if not ".pf" in root:
+        root = root + ".pf"
+
+    params, vals = np.loadtxt(root, dtype=str, unpack=True)
+
+    if OrderedDict_present:
+        pf_dict = OrderedDict()
+    else:
+        pf_dict = dict()    # should work with all version of python, but bad for writing
+        print("Warning, your dictionary object is not ordered.")
+
+    old_param = None 
+    old_val = None
+
+    for i in range(len(params)):
+
+
+        # convert if it is a float
+        try:
+            val = float(vals[i])
+
+        except ValueError:
+            val = vals[i]
+
+        if params[i] == old_param:
+
+            if isinstance(pf_dict[params[i]], list):
+                pf_dict[params[i]].append(val)
+
+            else:
+                pf_dict[params[i]] = [old_val, val]
+
+        else:
+            pf_dict[params[i]] = val
+
+        old_param = params[i]
+        old_val = val
+
+
+    return pf_dict
+
+def get_flux_at_wavelength(lambda_array, flux_array, w):
+
+    '''
+    Find the flux at wavelength w
+
+    Parameters:
+        lambda_array: array-like    
+            array of wavelengths in angstroms. 1d 
+
+        flux_array: array-like 
+            array of fluxes same shape as lambda_array 
+
+        w: float 
+            wavelength in angstroms to find
+    
+    Returns:
+        f: float 
+            flux at point w
+    '''
+
+    i = np.abs(lambda_array - w).argmin()
+
+    return flux_array[i]
+
+def wind_to_masked(d, value_string, return_inwind=False, mode="2d", ignore_partial = True):
+
+    '''
+    turn a table, one of whose colnames is value_string,
+    into a masked array based on values of inwind 
+
+    Parameters:
+        d: astropy.table.table.Table object 
+            data, probably read from .complete wind data 
+
+        value_string: str 
+            the variable you want in the array, e.g. "ne"
+
+        return_inwind: Bool
+            return the array which tells you whether you
+            are partly, fully or not inwind.
+    Returns:
+        x, z, value: Floats 
+            value is the quantity you are concerned with, e.g. ne
+    '''
+    # this tuple helpd us decide whether partial cells are in or out of the wind
+    if ignore_partial:
+        inwind_crit = (0,1)
+    else:
+        inwind_crit = (0,2)
+
+    if mode == "1d":
+        inwind = d["inwind"]
+        x = d["r"]
+        values = d[value_string]
+
+        # create an inwind boolean to use to create mask
+        inwind_bool = (inwind >= inwind_crit[0]) * (inwind < inwind_crit[1])
+        mask = ~inwind_bool
+
+    # finally we have our mask, so create the masked array
+        masked_values = np.ma.masked_where ( mask, values )
+
+    #return the arrays later, z is None for 1d
+        z = None
+
+
+    elif mode == "2d":
+        # our indicies are already stored in the file- we will reshape them in a sec
+        zindices = d["j"]
+        xindices = d["i"]
+
+        # we get the grid size by finding the maximum in the indicies list 99 => 100 size grid
+        zshape = int(np.max(zindices) + 1)
+        xshape = int(np.max(xindices) + 1)
+
+        # now reshape our x,z and value arrays
+        x = d["x"].reshape(xshape, zshape)
+        z = d["z"].reshape(xshape, zshape)
+
+        values = d[value_string].reshape(xshape, zshape)
+
+        # these are the values of inwind PYTHON spits out
+        inwind = d["inwind"].reshape(xshape, zshape)
+
+        # create an inwind boolean to use to create mask
+        inwind_bool = (inwind >= inwind_crit[0]) * (inwind < inwind_crit[1])
+        mask = ~inwind_bool
+
+        # finally we have our mask, so create the masked array
+        masked_values = np.ma.masked_where ( mask, values )
+
+
+    else:
+        print ("Error: mode {} not understood!".format(mode))
+
+    #return the transpose for contour plots.
+    if return_inwind:
+        return x, z, masked_values, inwind_bool
+    else:
+        return x, z, masked_values
+

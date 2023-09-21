@@ -24,7 +24,7 @@ def plot_full_spectra(ax, files, colors, args, folder):
         select = (wavelength>1280) * (wavelength<1999)
         wavelength = wavelength[select]
         fl = fl[select]
-        f0 = util.get_flux_at_wavelength(wavelength,fl ,W0)
+        f0 = blueshift_util.get_flux_at_wavelength(wavelength,fl ,W0)
         fl = savgol_filter(fl/f0, 15, 3)
         #gradient_fill(wavelength, fl, fill_color=colors[i], ax=ax, lw=2.3)
         ax.plot(wavelength, fl, c=colors[i], lw=3, alpha=1)
@@ -86,7 +86,7 @@ for itb, tb in enumerate(["thmin45"]):
             fl = s1[colname]
             #f = s1["Disk"]
             w = s1["Lambda"]
-            f0 = util.get_flux_at_wavelength(w,fl,W0)
+            f0 = blueshift_util.get_flux_at_wavelength(w,fl,W0)
             #cc = blueshift_util.get_continuum(w, f/f0, [1215, 1240, 1550, 1640, 1400, 1000, 1800,1909,2800], lmin=800, lmax = 3000, deg = 4)
             deltaf = ((1 * (len(angles))) - (1 * (iangle + 1)))
             fl = savgol_filter(fl/f0, 15, 3) + deltaf
@@ -101,9 +101,9 @@ for itb, tb in enumerate(["thmin45"]):
 
         ax = plt.subplot(121)
         d = io.read(data_dir+f[:-5] + ".master.txt")
-        x, z, c4, _ = util.wind_to_masked(d, "c4", return_inwind=True, ignore_partial=True)
-        x, z, ne, _ = util.wind_to_masked(d, "ne", return_inwind=True, ignore_partial=True)
-        x, z, vz, _ = util.wind_to_masked(d, "v_z", return_inwind=True, ignore_partial=True)
+        x, z, c4, _ = blueshift_util.wind_to_masked(d, "c4", return_inwind=True, ignore_partial=True)
+        x, z, ne, _ = blueshift_util.wind_to_masked(d, "ne", return_inwind=True, ignore_partial=True)
+        x, z, vz, _ = blueshift_util.wind_to_masked(d, "v_z", return_inwind=True, ignore_partial=True)
         cbar_mappable = ax.pcolormesh(x/1e18,z/1e18,np.log10(c4), vmax=0, vmin=-4, cmap="viridis")
         print (np.max(c4))
         ax.set_xlim(0,5)

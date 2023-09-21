@@ -2,11 +2,9 @@ import astropy.io.ascii as io
 import numpy as np 
 import matplotlib.pyplot as plt
 from scipy.signal import savgol_filter
-from scipy.interpolate import interp1d
 from astropy import constants as const
 from astropy import units as u
 import os
-import py_read_output as rd 
 import blueshift_util
 import matplotlib.patheffects as pe
 
@@ -17,10 +15,7 @@ def make_figure(alpha = "1"):
 
     data_dir  = "{}/steppar_specs_alpha{}/".format(blueshift_util.g_DataDir, alpha)
 
-    cmap_names = blueshift_util.cmap_dict
-
     plt.figure()
-    angles_all = np.arange(5,90,5)
     iplot = 0
 
     par_strings = ["diskmax", "omega", "alpha", "rv", "mdotw", "vinf"]

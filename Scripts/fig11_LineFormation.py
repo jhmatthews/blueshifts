@@ -4,18 +4,15 @@ import matplotlib.pyplot as plt
 from scipy.signal import savgol_filter
 from astropy import constants as const
 from astropy import units as u
-import py_plot_util as util
-import py_read_output as rd 
 import blueshift_util
 import matplotlib.patheffects as pe
-from constants import *
 
 def vescape(R, M=1e9):
-    vesc = np.sqrt(2.0 * G * M * MSOL / R) 
+    vesc = np.sqrt(2.0 * M * const.GM_sun.cgs.value / R) 
     return vesc
 
 def vkep(R, M=1e9):
-    vk = np.sqrt(G * M * MSOL / R) 
+    vk = np.sqrt(M * const.GM_sun.cgs.value / R) 
     return vk
 
 
@@ -77,8 +74,8 @@ def make_figure():
         plt.text(-2,4.1,r"$\alpha = {}$".format(alpha))
 
         #util.run_py_wind(full_fname, cmds=["1", "L", "0", "3", "s", "q"])
-        _,_,lc4 = rd.read_pywind("{}.lineC4.dat".format(full_fname))
-        _,_,vol = rd.read_pywind("{}.vol.dat".format(full_fname))
+        _,_,lc4 = blueshift_util.read_pywind("{}.lineC4.dat".format(full_fname))
+        _,_,vol = blueshift_util.read_pywind("{}.vol.dat".format(full_fname))
 
         if iplot == 0:
             plt.ylabel(r"Normalised $F_\lambda$", fontsize=18)
@@ -88,12 +85,12 @@ def make_figure():
 
 
         plt.subplot(2,7,7+iplot+1)
-        x, z, rho, _ = util.wind_to_masked(d, "rho", return_inwind=True, ignore_partial=True)
-        x, z, c4, _ = util.wind_to_masked(d, "c4", return_inwind=True, ignore_partial=True)
-        x, z, ne, _ = util.wind_to_masked(d, "ne", return_inwind=True, ignore_partial=True)
-        x, z, vz, _ = util.wind_to_masked(d, "v_z", return_inwind=True, ignore_partial=True)
-        x, z, vx, _ = util.wind_to_masked(d, "v_x", return_inwind=True, ignore_partial=True)
-        x, z, vy, _ = util.wind_to_masked(d, "v_y", return_inwind=True, ignore_partial=True)
+        x, z, rho, _ = blueshift_util.wind_to_masked(d, "rho", return_inwind=True, ignore_partial=True)
+        x, z, c4, _ = blueshift_util.wind_to_masked(d, "c4", return_inwind=True, ignore_partial=True)
+        x, z, ne, _ = blueshift_util.wind_to_masked(d, "ne", return_inwind=True, ignore_partial=True)
+        x, z, vz, _ = blueshift_util.wind_to_masked(d, "v_z", return_inwind=True, ignore_partial=True)
+        x, z, vx, _ = blueshift_util.wind_to_masked(d, "v_x", return_inwind=True, ignore_partial=True)
+        x, z, vy, _ = blueshift_util.wind_to_masked(d, "v_y", return_inwind=True, ignore_partial=True)
         vz = np.sqrt(vz * vz + vx * vx)
 
         ne = rho * rho2nh

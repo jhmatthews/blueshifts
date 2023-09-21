@@ -4,10 +4,9 @@ import astropy.io.ascii as asc
 import matplotlib.pyplot as plt
 from astropy import constants as const
 from astropy import units as u
-import matplotlib.colors as mcolors
-from matplotlib.patches import Polygon
 from scipy.interpolate import interp1d
 import blueshift_util
+from scipy.signal import savgol_filter
 
 def reshape_and_mask(var, astropy_table, shape=(100,100)):
     mask = (astropy_table["inwind"] < 0) 
@@ -31,9 +30,9 @@ def plot_continuum_normalised(ax, s, colname="A05P0.50", vel_max=10, color="C0",
     wavelength = s["Lambda"]
     velocity = (wavelength - 1550.0) / 1550.0 * const.c.cgs 
     velocity = velocity.to(u.km/u.s)
-    fcont = fit_continuum(wavelength, s[colname])
+    fcont = blueshift_util.fit_continuum(wavelength, s[colname])
 
-    fcont = fit_continuum(wavelength, s[colname])
+    fcont = blueshift_util.fit_continuum(wavelength, s[colname])
     flux = savgol_filter(s[colname]/fcont, 21, 3)
 
 

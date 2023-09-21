@@ -1,14 +1,7 @@
 import astropy.io.ascii as io 
 import numpy as np 
 import matplotlib.pyplot as plt
-from scipy.signal import savgol_filter
-from scipy.interpolate import interp1d
-from astropy import constants as const
-from astropy import units as u
-import py_plot_util as util
 import os
-import py_read_output as rd 
-from line_util import *
 import string
 import blueshift_util
 
@@ -18,11 +11,9 @@ def make_figure():
 
     Alpha, AlphaString, data_dir, speclist = blueshift_util.get_filenames_for_alpha("-1")
 
-    cmap_names = blueshift_util.cmap_dict
     cmap = "Spectral_r"
 
     plt.figure()
-    angles_all = np.arange(5,90,5)
     iplot = 0
 
     plt.figure(figsize=(12,7))
@@ -41,16 +32,16 @@ def make_figure():
             d = io.read(full_fname + ".master.txt")
 
             #util.run_py_wind(full_fname, cmds=["1", "L", "0", "3", "s", "q"], vers="86g")
-            _,_,lc4 = rd.read_pywind("{}.lineC4.dat".format(full_fname))
-            _,_,vol = rd.read_pywind("{}.vol.dat".format(full_fname))
+            _,_,lc4 = blueshift_util.read_pywind("{}.lineC4.dat".format(full_fname))
+            _,_,vol = blueshift_util.read_pywind("{}.vol.dat".format(full_fname))
 
 
             plt.subplot(3,6,iplot+1)
-            x, z, rho, _ = util.wind_to_masked(d, "rho", return_inwind=True, ignore_partial=True)
-            x, z, c4, _ = util.wind_to_masked(d, "c4", return_inwind=True, ignore_partial=True)
-            x, z, ne, _ = util.wind_to_masked(d, "ne", return_inwind=True, ignore_partial=True)
-            x, z, vz, _ = util.wind_to_masked(d, "v_z", return_inwind=True, ignore_partial=True)
-            x, z, vx, _ = util.wind_to_masked(d, "v_x", return_inwind=True, ignore_partial=True)
+            x, z, rho, _ = blueshift_util.wind_to_masked(d, "rho", return_inwind=True, ignore_partial=True)
+            x, z, c4, _ = blueshift_util.wind_to_masked(d, "c4", return_inwind=True, ignore_partial=True)
+            x, z, ne, _ = blueshift_util.wind_to_masked(d, "ne", return_inwind=True, ignore_partial=True)
+            x, z, vz, _ = blueshift_util.wind_to_masked(d, "v_z", return_inwind=True, ignore_partial=True)
+            x, z, vx, _ = blueshift_util.wind_to_masked(d, "v_x", return_inwind=True, ignore_partial=True)
 
             mu = 1.41
             #print (rho2nh)

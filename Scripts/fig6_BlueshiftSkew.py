@@ -2,14 +2,11 @@ import astropy.io.ascii as io
 import numpy as np 
 import matplotlib.pyplot as plt
 from scipy.signal import savgol_filter
-from scipy.interpolate import interp1d
 from astropy import constants as const
 from astropy import units as u
-import py_plot_util as util
 import os
 import py_read_output as rd 
 import blueshift_util
-import astropy.io.fits as pyfits
 from tqdm import tqdm
 
 def make_figure():
