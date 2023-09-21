@@ -164,3 +164,6 @@ slurm*
 *.out
 *.sh
 machine.file
+*.out.pf
+template.pf
+logfile
