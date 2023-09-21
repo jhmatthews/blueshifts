@@ -2,8 +2,6 @@ import numpy as np
 import astropy.io.ascii as io 
 import astropy.io.fits as pyfits
 from astropy import constants as const
-from astropy import units as u
-import py_read_output as rd 
 from scipy.signal import savgol_filter
 from scipy.interpolate import interp1d
 import os
@@ -13,7 +11,6 @@ import matplotlib.colors as mcolors
 from matplotlib.patches import Polygon
 from cycler import cycler
 
-#cmap_names = ["YlGn_r", "YlOrRd_r", "YlGnBu_r"]
 cmap_names = ["YlGn_r", "RdPu_r", "Blues_r"]
 
 cmap_dict = {"thmin70": "Blues_r", "thmin45": "RdPu_r", "thmin20": "YlGn_r"}
@@ -35,6 +32,7 @@ def rho2nh():
 
 
 def save_paper_figure(savename, fig = None, figure_dir = g_FigureDir, **savefig_kwargs):
+    """wrapper to save a paper figure in the main figures directory"""
     if fig == None:
         fig = plt.gcf()
     
@@ -143,44 +141,59 @@ def get_ew(wavelength, velocity, f, fcont):
 
 
 def calc_blueshift(f, data_dir):
-	try:
-		s = io.read("{}/{}".format(data_dir, f))
-	except io.core.InconsistentTableError:
-		print ("Error for", f)
+    """Calculate blueshift
 
-	wavelength = s["Lambda"]
-	velocity = (wavelength - 1550.0) / 1550.0 * const.c.cgs 
-	velocity = velocity.to(u.km/u.s)
+    Args:
+        f (string): filename
+        fcont (data_dir): directory
 
-	pf_root = f[:-5]
-	pf = rd.read_pf("{}/{}".format(data_dir, pf_root))
-	theta1 = float(pf["SV.thetamin(deg)"])
-	theta2 = float(pf["SV.thetamax(deg)"])
+    Returns:
+        blueshifts (array-like): array of blueshifts for each angle
+        ews (array-like): array of EWs for each angle
+        angles (array-like): array of angles in degrees
+    """
+    try:
+        s = io.read("{}/{}".format(data_dir, f))
+    except io.core.InconsistentTableError:
+        print ("Error for", f)
 
-	edgecolor="k"
-	ls = "-"
+    wavelength = s["Lambda"]
+    velocity = (wavelength - 1550.0) / 1550.0 * const.c.cgs 
+    velocity = velocity.to(u.km/u.s)
 
-	angles = np.arange(5,int(theta1)+5,5)
+    pf_root = f[:-5]
+    pf = read_pf("{}/{}".format(data_dir, pf_root))
+    theta1 = float(pf["SV.thetamin(deg)"])
 
-	blueshifts = np.zeros_like(angles, dtype=float)
-	ews = np.zeros_like(angles, dtype=float)
 
-	for i in range(len(angles)):
-		colname = "A{:02d}P0.50".format(angles[i])
+    angles = np.arange(5,int(theta1)+5,5)
 
-		fcont = fit_continuum(wavelength, s[colname])
-		flux = savgol_filter(s[colname]/fcont, 5, 3)
+    blueshifts = np.zeros_like(angles, dtype=float)
+    ews = np.zeros_like(angles, dtype=float)
 
-		# get blueshift 
-		blueshifts[i] =  get_blueshift(velocity/(u.km / u.s), s[colname], fcont)
-		ews[i] = get_ew(wavelength, velocity/(u.km / u.s), s[colname], fcont)
-		#print (blueshift)
+    for i in range(len(angles)):
+        colname = "A{:02d}P0.50".format(angles[i])
 
-	return (blueshifts, ews, angles)
+        fcont = fit_continuum(wavelength, s[colname])
 
-#@jit(nopython=True)
-def get_blueshift(velocity, f, fcont):
-    line_flux = f-fcont
+        # get blueshift 
+        blueshifts[i] =  get_blueshift(velocity/(u.km / u.s), s[colname], fcont)
+        ews[i] = get_ew(wavelength, velocity/(u.km / u.s), s[colname], fcont)
+
+    return (blueshifts, ews, angles)
+
+def get_blueshift(velocity, flux, fcont):
+    """Calculate blueshift from a velocity, flux and continuum flux
+
+    Args:
+        velocity (array-like): velocity array in km/s
+        flux (array-like): flux array
+        fcont (array-like): continuum flux array
+
+    Returns:
+        velocity (float): blueshift in km.s 
+    """
+    line_flux = flux-fcont
     line_flux = line_flux[(np.fabs(velocity)<1e4)]
     v_use = velocity[(np.fabs(velocity)<1e4)]
 
@@ -192,52 +205,62 @@ def get_blueshift(velocity, f, fcont):
     cdf = np.cumsum(fnew) / np.sum(fnew)
     halfway = np.argmin(np.fabs(cdf - 0.5))
 
-    #plt.plot(velocity[(np.fabs(velocity)<1e4)], cdf)
-    #plt.plot(line_flux)
     return (-velocity_new[halfway])
 
-def order(mi,ma):
-    if mi>ma:
-        mi,ma=ma,mi
-    return mi,ma
+# def order(mi,ma):
+#     if mi>ma:
+#         mi,ma=ma,mi
+#     return mi,ma
 
 #@jit(nopython=True)
 def fit_continuum(w, f, lines=[1215,1240,1400,1640,1753,1909,2800,1550,1030,4863,6563], 
                   window_length=9, polyorder=5, mask_size = 70):
-	f_filter = savgol_filter(f, window_length, polyorder) 
-	mask = np.ones_like(w, dtype=bool)
-	for l in lines:
-		mask *= (np.fabs(l - w) >  mask_size)
+    f_filter = savgol_filter(f, window_length, polyorder) 
+    mask = np.ones_like(w, dtype=bool)
+    for l in lines:
+        mask *= (np.fabs(l - w) >  mask_size)
 
-	interp_func = interp1d(w[mask], f_filter[mask], kind="slinear", fill_value="extrapolate")
-	fcont = interp_func(w)
-	return (fcont)
+    interp_func = interp1d(w[mask], f_filter[mask], kind="slinear", fill_value="extrapolate")
+    fcont = interp_func(w)
+    return (fcont)
 
-def getind(lst,val):
-    diff=abs(lst-val)
-    closest=min(diff)
-    diff=list(diff)
-    return diff.index(closest)
+# def getind(lst,val):
+#     diff=abs(lst-val)
+#     closest=min(diff)
+#     diff=list(diff)
+#     return diff.index(closest)
 
-def shape(w,det,bls,lmin,lmax,l0, return_arg = False):
-    xmin,xmax=order(getind(w,lmax),getind(w,lmin))
-    reduced=det[xmin:xmax]
-    argmax = list(reduced).index(np.max(reduced))
-    argmax = np.argmax(reduced)
-    ws=w[xmin:xmax][argmax]
+# def shape(w,det,bls,lmin,lmax,l0, return_arg = False):
+#     xmin,xmax=order(getind(w,lmax),getind(w,lmin))
+#     reduced=det[xmin:xmax]
+#     argmax = list(reduced).index(np.max(reduced))
+#     argmax = np.argmax(reduced)
+#     ws=w[xmin:xmax][argmax]
 
-    print (xmin, xmax, argmax)
+#     print (xmin, xmax, argmax)
 
-    vpeak = const.c.cgs * (ws-l0)/l0
+#     vpeak = const.c.cgs * (ws-l0)/l0
 
-    vpeak = vpeak.cgs.value / 1e5
+#     vpeak = vpeak.cgs.value / 1e5
 
-    if return_arg:
-        return vpeak - bls, ws, vpeak, argmax, xmin, xmax
-    else:
-        return vpeak - bls, ws, vpeak
+#     if return_arg:
+#         return vpeak - bls, ws, vpeak, argmax, xmin, xmax
+#     else:
+#         return vpeak - bls, ws, vpeak
 
 def get_skew(velocity, flux, blueshift):
+    """Calculate the skew of an emission line
+
+    Args:
+        velocity (array-like): velocity array in km/s
+        flux (array-like): flux array
+        blueshift (float): blueshift in km.s 
+
+    Returns:
+        vpeak (float): peak velocity in km/s
+        fpeak (float): flux at peak in same units as flux array
+        skew (float): skew value in km.s
+    """
     line_flux = flux
     line_flux = line_flux[(np.fabs(velocity)<1e4)]
     v_use = velocity[(np.fabs(velocity)<1e4)]
@@ -255,8 +278,7 @@ def get_skew(velocity, flux, blueshift):
     return (vpeak, fpeak, skew)
 
 def get_flux_at_wavelength(lambda_array, flux_array, w):
-
-    '''
+    """
     Find the flux at wavelength w
 
     Parameters:
@@ -272,7 +294,7 @@ def get_flux_at_wavelength(lambda_array, flux_array, w):
     Returns:
         f: float 
             flux at point w
-    '''
+    """
 
     i = np.abs(lambda_array - w).argmin()
 
@@ -366,17 +388,10 @@ def gradient_fill(x, y, fill_color=None, ax=None, mappable = None, alpha = None,
 
 
     if mappable is None:
-        # z = np.empty((100, 1, 4), dtype=float)
-        # rgb = mcolors.colorConverter.to_rgb(fill_color)
-        # z[:,:,:3] = rgb
-        # z[:,:,-1] = np.linspace(0, alpha, 100)[:,None]
-
         Nz = 10000
         z = np.empty((Nz, 1, 4), dtype=float)
-        #print (fill_color)
         rgb = mcolors.colorConverter.to_rgb(fill_color)
         rgb = fill_color[:3]
-        #print (rgb)
         z[:,:,:3] = rgb
 
         z[:,:,-1] = np.linspace(0, 0.85, Nz)[:,None] ** 1.5
@@ -385,8 +400,6 @@ def gradient_fill(x, y, fill_color=None, ax=None, mappable = None, alpha = None,
         xx, yy = np.meshgrid(x, y)
         z = mappable.to_rgba(xx[::-1])
         z[:,:,-1] = alpha
-    #z[:,:,-1] = np.linspace(0, alpha, 100)[:,None]
-
 
     xmin, xmax, ymin, ymax = x.min(), x.max(), y.min(), y.max()
     im = ax.imshow(z, aspect='auto', extent=[xmin, xmax, 0, ymax],
@@ -398,72 +411,71 @@ def gradient_fill(x, y, fill_color=None, ax=None, mappable = None, alpha = None,
     ax.add_patch(clip_path)
     im.set_clip_path(clip_path)
     line, = ax.plot(x, y, color = fill_color, **kwargs, zorder=zorder)
-
-    #ax.autoscale(True)
     return line, im
 
 
 def set_plot_defaults():
-	## FIGURE
-	plt.rcParams["text.usetex"] = "True"
-	#plt.rcParams['figure.figsize']=(8, 8) # MNRAS columnwidth
+    """set some nice plot defaults and use times font
+    """
+    ## FIGURE
+    plt.rcParams["text.usetex"] = "True"
 
-	## FONT
-	plt.rcParams['font.serif']=['Times']
-	plt.rcParams['font.family']='serif'	
+    ## FONT
+    plt.rcParams['font.serif']=['Times']
+    plt.rcParams['font.family']='serif'	
 
-	plt.rcParams['text.latex.preamble']=r'\usepackage{amsmath}'
+    plt.rcParams['text.latex.preamble']=r'\usepackage{amsmath}'
 
-	plt.rcParams['font.size']=18
-	plt.rcParams['xtick.labelsize']=15
-	plt.rcParams['ytick.labelsize']=15
-	plt.rcParams['legend.fontsize']=14
-	plt.rcParams['axes.titlesize']=16
-	plt.rcParams['axes.labelsize']=16
-	plt.rcParams['axes.linewidth']=2
-	plt.rcParams["lines.linewidth"] = 2.2
-	## TICKS
-	plt.rcParams['xtick.top']='True'
-	plt.rcParams['xtick.bottom']='True'
-	plt.rcParams['xtick.minor.visible']='True'
-	plt.rcParams['xtick.direction']='out'
-	plt.rcParams['ytick.left']='True'
-	plt.rcParams['ytick.right']='True'
-	plt.rcParams['ytick.minor.visible']='True'
-	plt.rcParams['ytick.direction']='out'
-	plt.rcParams['xtick.major.width']=1.5
-	plt.rcParams['xtick.minor.width']=1
-	plt.rcParams['xtick.major.size']=4
-	plt.rcParams['xtick.minor.size']=3
-	plt.rcParams['ytick.major.width']=1.5
-	plt.rcParams['ytick.minor.width']=1
-	plt.rcParams['ytick.major.size']=4
-	plt.rcParams['ytick.minor.size']=3
+    plt.rcParams['font.size']=18
+    plt.rcParams['xtick.labelsize']=15
+    plt.rcParams['ytick.labelsize']=15
+    plt.rcParams['legend.fontsize']=14
+    plt.rcParams['axes.titlesize']=16
+    plt.rcParams['axes.labelsize']=16
+    plt.rcParams['axes.linewidth']=2
+    plt.rcParams["lines.linewidth"] = 2.2
+    ## TICKS
+    plt.rcParams['xtick.top']='True'
+    plt.rcParams['xtick.bottom']='True'
+    plt.rcParams['xtick.minor.visible']='True'
+    plt.rcParams['xtick.direction']='out'
+    plt.rcParams['ytick.left']='True'
+    plt.rcParams['ytick.right']='True'
+    plt.rcParams['ytick.minor.visible']='True'
+    plt.rcParams['ytick.direction']='out'
+    plt.rcParams['xtick.major.width']=1.5
+    plt.rcParams['xtick.minor.width']=1
+    plt.rcParams['xtick.major.size']=4
+    plt.rcParams['xtick.minor.size']=3
+    plt.rcParams['ytick.major.width']=1.5
+    plt.rcParams['ytick.minor.width']=1
+    plt.rcParams['ytick.major.size']=4
+    plt.rcParams['ytick.minor.size']=3
      
 def set_cmap_cycler(cmap_name = "viridis", N = None):
-	'''
-	set the cycler to use a colormap
-	'''
-	if cmap_name == "default" or N is None:
-		my_cycler = cycler('color', ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'])
-	else:
-		_, colors = get_mappable(N, cmap_name = cmap_name)
-		#if type(style) == str:
-		my_cycler = (cycler(color=colors)) 
+    '''
+    set the cycler to use a colormap
+    '''
+    if cmap_name == "default" or N is None:
+        my_cycler = cycler('color', ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'])
+    else:
+        _, colors = get_mappable(N, cmap_name = cmap_name)
+        #if type(style) == str:
+        my_cycler = (cycler(color=colors)) 
 
-	plt.rc('axes', prop_cycle=my_cycler)
+    plt.rc('axes', prop_cycle=my_cycler)
     
 def get_mappable(N, vmin=0, vmax=1, cmap_name = "Spectral", return_func = False):
-	my_cmap = matplotlib.cm.get_cmap(cmap_name)
-	colors = my_cmap(np.linspace(0,1,num=N))
+    my_cmap = matplotlib.cm.get_cmap(cmap_name)
+    colors = my_cmap(np.linspace(0,1,num=N))
 
-	norm = matplotlib.colors.Normalize(vmin=vmin, vmax=vmax)
-	mappable = matplotlib.cm.ScalarMappable(norm=norm, cmap=cmap_name)
-	if return_func:
-		fcol = colour_func(norm, cmap_name)
-		return (mappable, colors, mappable.to_rgba)
-	else:
-		return (mappable, colors)
+    norm = matplotlib.colors.Normalize(vmin=vmin, vmax=vmax)
+    mappable = matplotlib.cm.ScalarMappable(norm=norm, cmap=cmap_name)
+    if return_func:
+        fcol = colour_func(norm, cmap_name)
+        return (mappable, colors, mappable.to_rgba)
+    else:
+        return (mappable, colors)
      
 
 def read_pywind(filename, return_inwind=False, mode="2d", complete=True):

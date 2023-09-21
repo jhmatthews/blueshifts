@@ -5,7 +5,6 @@ from scipy.signal import savgol_filter
 from astropy import constants as const
 from astropy import units as u
 import os
-import py_read_output as rd 
 import blueshift_util
 from tqdm import tqdm
 
