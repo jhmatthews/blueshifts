@@ -1,5 +1,4 @@
 import astropy.io.ascii as io 
-import astropy
 import numpy as np 
 import matplotlib.pyplot as plt
 from scipy.signal import savgol_filter
@@ -7,14 +6,11 @@ from scipy.interpolate import interp1d
 from astropy import constants as const
 from astropy import units as u
 import py_plot_util as util
-import sys, os
-import matplotlib
+import os
 import py_read_output as rd 
 from line_util import *
-import jm_util
 import string
 import blueshift_util
-import cmasher as cmr
 
 def make_figure():
     print ("Making figure 7...", end="")
