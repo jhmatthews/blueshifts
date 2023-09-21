@@ -6,7 +6,6 @@ from scipy.interpolate import interp1d
 from astropy import constants as const
 from astropy import units as u
 import os
-import py_read_output as rd 
 from tqdm import tqdm
 import blueshift_util
 
@@ -51,7 +50,7 @@ def make_figure(alphas = ["0.5", "1", "1.5"]):
 
 				# read parameter file to get wind opening angles
 				pf_root = f[:-5]
-				pf = rd.read_pf("{}/{}".format(data_dir, pf_root))
+				pf = blueshift_util.read_pf("{}/{}".format(data_dir, pf_root))
 				theta1 = float(pf["SV.thetamin(deg)"])
 				theta2 = float(pf["SV.thetamax(deg)"])
 				theta_b = 0.5 * (theta1 + theta2)
