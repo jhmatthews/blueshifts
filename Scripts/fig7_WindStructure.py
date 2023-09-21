@@ -8,7 +8,6 @@ import blueshift_util
 
 def make_figure():
     print("Making figure 7...", end="")
-    blueshift_util.set_plot_defaults()
 
     Alpha, AlphaString, data_dir, speclist = blueshift_util.get_filenames_for_alpha(
         "-1")
@@ -106,4 +105,5 @@ def make_figure():
 
 
 if __name__ == "__main__":
+    blueshift_util.set_plot_defaults()
     make_figure()

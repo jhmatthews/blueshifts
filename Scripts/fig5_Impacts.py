@@ -83,4 +83,5 @@ def make_figure():
 
 
 if __name__ == "__main__":
+    blueshift_util.set_plot_defaults()
     make_figure()

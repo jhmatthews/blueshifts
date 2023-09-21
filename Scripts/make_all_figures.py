@@ -5,7 +5,15 @@ import fig7_WindStructure
 import fig10_StepPar
 import fig11_LineFormation
 import fig12_SedPlot
+import sys 
+import blueshift_util
 
+tex = "True"
+if len(sys.argv) > 1:
+    if sys.argv[1] == "--notex":
+        tex = "False"
+
+blueshift_util.set_plot_defaults(tex=tex)
 fig2_heuristic.make_figure()
 fig5_Impacts.make_figure()
 fig6_BlueshiftSkew.make_figure()

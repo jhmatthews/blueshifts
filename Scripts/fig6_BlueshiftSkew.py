@@ -12,7 +12,6 @@ from tqdm import tqdm
 def make_figure():
     print("Making figure 6...")
 
-    blueshift_util.set_plot_defaults()
     data_dir = blueshift_util.g_DataDir
     cmap_names = blueshift_util.cmap_dict
     th_label = [70, 45, 20]
@@ -117,4 +116,5 @@ def make_figure():
 
 
 if __name__ == "__main__":
+    blueshift_util.set_plot_defaults()
     make_figure()

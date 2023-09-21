@@ -31,8 +31,6 @@ def vel_law(l, R_v=1e19, r0=3e16, v0=1e6, fesc=1.0, alpha=1.0, theta=45.0):
 def make_figure():
     print("Making figure 11...", end="")
 
-    blueshift_util.set_plot_defaults()
-
     data_dir = "{}/steppar_specs_alpha1/".format(blueshift_util.g_DataDir)
 
     plt.figure()
@@ -152,4 +150,5 @@ def make_figure():
 
 
 if __name__ == "__main__":
+    blueshift_util.set_plot_defaults()
     make_figure()

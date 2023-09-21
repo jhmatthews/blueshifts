@@ -116,7 +116,6 @@ def make_plot_observer(var, data, title, cmap="viridis", log=True, four=True, si
 
 def make_figure(alpha=1):
     print("Making figure 2...", end="")
-    blueshift_util.set_plot_defaults()
 
     #alpha = 0.5
     data_dir = blueshift_util.get_data_dir_for_alpha(alpha=alpha)
@@ -195,6 +194,8 @@ def make_figure(alpha=1):
 
 
 if __name__ == "__main__":
+    blueshift_util.set_plot_defaults()
+    
     alpha = 1
     if len(sys.argv) > 1:
         alpha = float(sys.argv[1])

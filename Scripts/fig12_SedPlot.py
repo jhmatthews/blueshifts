@@ -89,7 +89,6 @@ def make_figure():
                    bottom=0.15, top=0.98, wspace=0.05)
     gs2 = GridSpec(1, 1, left=0.66, right=0.99, bottom=0.15, top=0.98)
 
-    blueshift_util.set_plot_defaults()
 
     data_dir = "{}/sed_change".format(blueshift_util.g_DataDir)
     #data_dir = os.path.abspath(os.path.join(os.path.dirname(__file__ ), '..', 'Data/specs_f840486/'))
@@ -176,4 +175,5 @@ def make_figure():
 
 
 if __name__ == "__main__":
+    blueshift_util.set_plot_defaults()
     make_figure()

@@ -433,11 +433,11 @@ def gradient_fill(x, y, fill_color=None, ax=None, mappable=None, alpha=None, zor
     return line, im
 
 
-def set_plot_defaults():
+def set_plot_defaults(tex="True"):
     """set some nice plot defaults and use times font
     """
     # FIGURE
-    plt.rcParams["text.usetex"] = "False"
+    plt.rcParams["text.usetex"] = tex
 
     # FONT
     plt.rcParams['font.serif'] = ['Times']
