@@ -440,10 +440,11 @@ def set_plot_defaults(tex="True"):
     plt.rcParams["text.usetex"] = tex
 
     # FONT
-    plt.rcParams['font.serif'] = ['Times']
+    if tex == "True":
+        plt.rcParams['font.serif'] = ['Times']
+        plt.rcParams['text.latex.preamble'] = r'\usepackage{amsmath}'
+    
     plt.rcParams['font.family'] = 'serif'
-
-    plt.rcParams['text.latex.preamble'] = r'\usepackage{amsmath}'
 
     plt.rcParams['font.size'] = 18
     plt.rcParams['xtick.labelsize'] = 15
