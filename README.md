@@ -6,7 +6,7 @@ Scripts and supplementary data for the paper "A disc wind model for blueshifts i
 
 ## Directory structure 
 
-* **_Data:** Data outputted from the radiative transfer calculations. 
+* **Data:** Data outputted from the radiative transfer calculations. 
 * **Scripts:** Python scripts for making figures for the paper
 * **supplement:** Supplementary material (source TeX and figures)
 * **Figures:** Empty directory where the figures go

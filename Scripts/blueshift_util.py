@@ -17,7 +17,7 @@ cmap_dict = {"thmin70": "Blues_r", "thmin45": "RdPu_r", "thmin20": "YlGn_r"}
 fiducial_angle = 15
 
 g_DataDir = os.path.abspath(os.path.join(
-    os.path.dirname(__file__), '..', '_Data'))
+    os.path.dirname(__file__), '..', 'Data'))
 g_FigureDir = os.path.abspath(os.path.join(
     os.path.dirname(__file__), '..', 'Figures'))
 
