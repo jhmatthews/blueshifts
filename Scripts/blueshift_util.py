@@ -443,8 +443,7 @@ def set_plot_defaults(tex="True"):
     if tex == "True":
         plt.rcParams['font.serif'] = ['Times']
         plt.rcParams['text.latex.preamble'] = r'\usepackage{amsmath}'
-        print ("using latex")
-        
+
     plt.rcParams['font.family'] = 'serif'
 
     plt.rcParams['font.size'] = 18

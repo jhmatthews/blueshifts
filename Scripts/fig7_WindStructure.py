@@ -56,11 +56,9 @@ def make_figure():
             vz/1e5), c=np.log10(lc4), s=5, vmin=37.5, vmax=42.5, cmap=cmap)
 
         vz_flt = vz.flatten()
-        iargs = np.argsort(vz)
         lc4_flt = lc4.flatten()
         lcf_cdf = np.cumsum(lc4_flt) / np.sum(lc4_flt)
         v90 = vz_flt[np.argmin(np.fabs(lcf_cdf-0.9))]/1e5
-        #print (string.ascii_lowercase[iplot], v90)
         v90_all[iplot] = v90
 
         plt.grid(ls=":")

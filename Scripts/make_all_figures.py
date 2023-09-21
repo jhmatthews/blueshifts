@@ -1,4 +1,5 @@
 import fig2_heuristic
+import fig4_Inclination
 import fig5_Impacts
 import fig6_BlueshiftSkew
 import fig7_WindStructure
@@ -18,6 +19,7 @@ blueshift_util.set_plot_defaults(tex=tex)
 
 # make plots 
 fig2_heuristic.make_figure()
+fig4_Inclination.make_figure()
 fig5_Impacts.make_figure()
 fig6_BlueshiftSkew.make_figure()
 fig7_WindStructure.make_figure()
@@ -28,5 +30,4 @@ print("All Done.")
 
 # TO DO
 # Get all figure plots working
-# remove references to constants
 # minimal virtual environment and test.
