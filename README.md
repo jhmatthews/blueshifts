@@ -3,7 +3,11 @@
 [![Tests](https://github.com/jhmatthews/blueshifts/actions/workflows/test_figures.yml/badge.svg)](https://github.com/jhmatthews/blueshifts/actions/workflows/test_figures.yml)
 [![arXiv](https://img.shields.io/badge/arXiv-2309.14434-b31b1b.svg)](http://arxiv.org/abs/2309.14434)
 
-Scripts and supplementary data for the paper "A disc wind model for blueshifts in quasar broad emission lines", MNRAS, in press, [arXiv:2309.14434](http://arxiv.org/abs/2309.14434). If you use any of this data please cite the paper accordingly. 
+Scripts and supplementary data for the paper: 
+
+_"A disc wind model for blueshifts in quasar broad emission lines"_, James H. Matthews, Jago Strong-Wright, Christian Knigge, Paul Hewett, Matthew J. Temple, Knox S. Long, Amy L. Rankine, Matthew Stepney, Manda Banerji, Gordon T. Richards, MNRAS, 2023, in press, [arXiv:2309.14434](http://arxiv.org/abs/2309.14434)
+
+If you use any of this data please cite the paper accordingly. 
 
 ## Directory structure 
 
